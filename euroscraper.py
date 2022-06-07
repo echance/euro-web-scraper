@@ -21,6 +21,7 @@ for link in participant_links:
     driver.get(link)
     country = driver.find_element(By.CSS_SELECTOR, "a[href*='/country']")
     youtube = driver.find_element(By.CSS_SELECTOR, "a[href*='/watch']")
+    youtube_link = youtube.get_attribute("href") if (youtube is None) else None
     song = driver.find_element(By.XPATH, "//dd[contains(@class, 'text-sm')]/div/div[1]")
     artist = driver.find_element(By.XPATH, "//h1[contains(@class, 'font-bold')]")
     lyrics = driver.find_element(By.CSS_SELECTOR, "div.whitespace-pre-line")
@@ -28,7 +29,7 @@ for link in participant_links:
         "country": country.text,
         "artist": artist.text,
         "song": song.text,
-        "youtube": youtube.get_attribute("href"),
+        "youtube": youtube_link,
         "lyrics": lyrics.text
     }
     full_participant_data.append(participant_json)
