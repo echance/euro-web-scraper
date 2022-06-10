@@ -19,7 +19,8 @@ filtered_events = []
 for event in all_events:
     url_string = event.get_attribute("href")
     if (url_string not in filtered_events and url_string[-4:].isnumeric()):
-        filtered_events.append(f"Added {url_string} to filtered_events")
+        filtered_events.append(url_string)
+        print(f"Added {url_string} to filtered_events")
         
 
 participant_links = []
@@ -36,7 +37,7 @@ def get_dictionary_index(list, key, value):
 # Get participant links from each year and push link/year object to array. Calling build_participant_data in nested loops caused issues.
 def get_participants(event):
     # Get year from end of each event url
-    year = event[-4:]
+    year = int(event[-4:])
     # Each year will be a key to hold participant data object
     full_participant_data.append({
         'year': year,
@@ -81,17 +82,16 @@ def build_participant_data(current_participant_link, year):
         "song": song.text,
         "youtube": youtube,
         "lyrics": lyrics,
-        "final_score": ''
+        "final_score": 0
     }
     full_participant_data[event_index_map[year]]['participants'].append(participant_json)
 
 # Loop through all participant links
 for current_link in participant_links:
-
     build_participant_data(current_link['link'], current_link['year'])
 
 # Write data to json file
-with open('participant-data.json', 'w', encoding='utf8') as fp:
+with open('./generated/participant-data.json', 'w', encoding='utf8') as fp:
     json.dump(full_participant_data, fp)
 
 driver.close()
